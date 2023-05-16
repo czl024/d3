@@ -9,6 +9,10 @@ class GameScene extends Phaser.Scene{
     height;
     timeElapsed;
     spawned = false;
+    maxDistance = 600;
+    minDistance = 300;
+    xMaxAccel = 500;
+    yMaxAccel = 1000;
 
     constructor(key, name){
         super(key);
@@ -38,20 +42,14 @@ class GameScene extends Phaser.Scene{
         if( ((this.timeElapsed) * 10 % 10) != 0 ) this.timerText.setText(`Time : ${this.timeElapsed}`);
         else this.timerText.setText(`Time : ${this.timeElapsed}.0`);
         this.destroyBalls();
+        this.pullBalls();
 
         if(this.timeElapsed % .5 == 0){
-            this.timerText.setAlpha(.5);
             if(!this.spawned){
-                for(let x = 0; x < this.spawners.length; x++){
-                    this.spawnBalls(this.spawnerParameters[x]);
-                }
+                for(let x = 0; x < this.spawners.length; x++) this.spawnBalls(this.spawnerParameters[x]);
             }
             this.spawned = true;
-        }else{
-            this.spawned = false;
-            this.timerText.setAlpha(1);
-        }
-        console.log(this.balls.length);
+        }else this.spawned = false;
     }
 
     finishLevel(){
@@ -60,17 +58,44 @@ class GameScene extends Phaser.Scene{
 
     spawnBalls(a){
         let newBall = this.physics.add.image(a[0], a[1], 'ball');
+        this.physics.add.overlap(newBall, this.goals);
+        //this.physics.add.overlap(newBall);
         this.physics.velocityFromRotation(a[2], a[3], newBall.body.velocity);
         this.balls.push(newBall);
     }
 
     destroyBalls(){
         this.balls.forEach((b, index) => {
-            if(b.x < -25 || b.x > this.width + 20 || b.y > this.height + 20){
+            if(b.x < -25 || b.x > this.width + 20 || b.y > this.height + 20 || !b.body.touching.none){
                 b.destroy();
                 this.balls.splice(index, index + 1);
             }
         })
+    }
+
+    pullBalls(){
+        this.gravObj.forEach((a, i) => {
+            this.balls.forEach((b, j) => {
+                let distance = Phaser.Math.Distance.Between(a.x, a.y, b.x, b.y);
+                if(distance <= this.maxDistance){
+                    let angle = this.getAngle(a.x, a.y, b.x, b.y);
+                    let distFactor;
+                    if(distance <= this.minDistance) distFactor = 1;
+                    else distFactor = (1 - (distance / this.maxDistance)) * 2;
+                    b.setAcceleration(-1 * distFactor * this.xMaxAccel * Math.cos(angle), -1 * distFactor * this.yMaxAccel * Math.sin(angle));
+                    b.setScale(3 * distFactor + 1);
+                }else{
+                    b.setScale(1);
+                    b.setAcceleration(0);
+                }
+            })
+        })
+    }
+
+    getAngle(x1, y1, x2, y2){
+        let dx = x1 - x2;
+        let dy = y1 - y2;
+        return(Math.atan(dy/dx));
     }
 }
 
