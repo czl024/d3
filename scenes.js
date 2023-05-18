@@ -11,7 +11,7 @@ class GameScene extends Phaser.Scene{
     spawned = false;
     maxDistance = 600;
     minDistance = 300;
-    xMaxAccel = 500;
+    xMaxAccel = 400;
     yMaxAccel = 1000;
 
     constructor(key, name){

@@ -50,6 +50,6 @@ const game = new Phaser.Game({
     title: "Graballty",
     physics: {
         default: 'arcade',
-        arcade: { gravity: {y: 200}, debug: true }
+        arcade: { gravity: {y: 150}, debug: true }
     }
 });
