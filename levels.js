@@ -59,20 +59,25 @@ class Level3 extends GameScene{
 
     create(){
         //establish level parameters
-        this.level = 3;
+        this.level = 1;
         this.goalCounter = 1;
 
         //create level
         //spawners
-        let s1 = this.add.image(this.width / 3, this.height / 2, 'spawner');
+        let s1 = this.add.image((Math.random() * this.width)/2, (Math.random() * this.height)/2, 'spawner')
         this.spawners.push(s1);
-        this.spawnerParameters.push([s1.x, s1.y, -45, 250]);
+        this.spawnerParameters.push([s1.x, s1.y, 0-(Math.random()*100), (Math.random()*500)]);
         //goals
-        let goal = this.physics.add.image(2 * this.width / 3, this.height / 2, 'goal');
+        let goal = this.physics.add.image((Math.random() * this.width)/2, (Math.random() * this.height)/2, 'goal');
+        let goal2 = this.physics.add.image((Math.random() * this.width)/2, (Math.random() * this.height)/2, 'goal')
         goal.setOrigin(.5);
         goal.setScale(2);
         goal.setMaxVelocity(0);
+        goal2.setOrigin(.5);
+        goal2.setScale(2);
+        goal2.setMaxVelocity(0);
         this.goals.push(goal);
+        this.goals.push(goal2);
     }
 
     finishLevel(){
