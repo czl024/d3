@@ -39,6 +39,7 @@ class GameScene extends Phaser.Scene{
 
     
     update(time, delta){
+        console.log(this.goalCounter)
         //values and variables
         const mouse = this.input.activePointer;
         this.activeObj;
@@ -96,7 +97,7 @@ class GameScene extends Phaser.Scene{
             });
             obj.on('pointerup', () => {
                 //destroy the attractor if it's "clicked")
-                if(this.activeTimer < 8 && this.activeObj !== undefined){
+                if(this.activeTimer < 12 && this.activeObj !== undefined){
                     this.gravObj.splice(this.activeObjInd, this.activeObjInd + 1);
                     this.activeObj.destroy();
                 }
@@ -125,20 +126,32 @@ class GameScene extends Phaser.Scene{
         this.balls.forEach((b, index) => {
             //if ball is touching goal, destroy goal, decrement goal counter
             if(!b.body.touching.none){
-                this.goalCounter--;
                 //need to figure out which goal it's touching
+                b.destroy();
+                this.balls.splice(index, index + 1);
                 this.goals.forEach((g, i) =>{
                     if(!g.body.touching.none) {
                         g.destroy();
                         this.goals.splice(i, i + 1);
                     }
                 })
+                this.goalCounter--;
+                console.log("AAAAA")
             }
             //if ball is out of bounds, destroy
             else if(b.x < -25 || b.x > this.width + 20 || b.y > this.height + 20){
                 b.destroy();
                 this.balls.splice(index, index + 1);
             }
+        })
+    }
+
+
+
+    obliterateBalls(){
+        this.balls.forEach((b, index) => {
+            b.destroy();
+            this.balls.splice(index, index + 1);
         })
     }
 

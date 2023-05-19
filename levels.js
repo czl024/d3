@@ -1,11 +1,12 @@
 class Level1 extends GameScene{
-    constructor() { super('lv1') }
-
-    create(){
-        //establish level parameters
+    constructor() {
+        super('lv1')
         this.level = 1;
         this.goalCounter = 1;
+    }
 
+    create(){
+        console.log(this.goalCounter)
         //create level
         //spawners
         let s1 = this.add.image(this.width / 3, this.height / 2, 'spawner');
@@ -17,9 +18,17 @@ class Level1 extends GameScene{
         goal.setScale(2);
         goal.setMaxVelocity(0);
         this.goals.push(goal);
+
+        //tutorial
+        this.add.text(this.width / 2, 2 * this.height / 3, "Click to add/delete attractors\nClick and hold to drag attractors\nGet the balls in the swirly things", {
+            fontSize: 25,
+            align: 'center'
+        })
+
     }
 
     finishLevel(){
+        this.obliterateBalls();
         this.scene.start('sum', {time: this.timeElapsed, obj: this.gravObj.length, lv: this.level});
     }
 }
@@ -27,27 +36,34 @@ class Level1 extends GameScene{
 
 
 class Level2 extends GameScene{
-    constructor() { super('lv2') }
+    constructor() {
+        super('lv2')
+        this.level = 2;
+        this.goalCounter = 2;
+    }
 
     create(){
-        //establish level parameters
-        this.level = 2;
-        this.goalCounter = 1;
-
+        console.log(this.goalCounter)
         //create level
         //spawners
-        let s1 = this.add.image(this.width / 3, this.height / 2, 'spawner');
+        let s1 = this.add.image(this.width / 2, this.height / 3, 'spawner');
         this.spawners.push(s1);
-        this.spawnerParameters.push([s1.x, s1.y, -45, 250]);
+        this.spawnerParameters.push([s1.x, s1.y, -90, 500]);
         //goals
-        let goal = this.physics.add.image(2 * this.width / 3, this.height / 2, 'goal');
-        goal.setOrigin(.5);
-        goal.setScale(2);
-        goal.setMaxVelocity(0);
-        this.goals.push(goal);
+        let goal1 = this.physics.add.image(3 * this.width / 4, 2 * this.height / 3, 'goal');
+        goal1.setOrigin(.5);
+        goal1.setScale(2);
+        goal1.setMaxVelocity(0);
+        this.goals.push(goal1);
+        let goal2 = this.physics.add.image(this.width / 4, 2 * this.height / 3, 'goal');
+        goal2.setOrigin(.5);
+        goal2.setScale(2);
+        goal2.setMaxVelocity(0);
+        this.goals.push(goal2);
     }
 
     finishLevel(){
+        this.obliterateBalls();
         this.scene.start('sum', {time: this.timeElapsed, obj: this.gravObj.length, lv: this.level});
     }
 }
@@ -55,13 +71,14 @@ class Level2 extends GameScene{
 
 
 class Level3 extends GameScene{
-    constructor() { super('lv3') }
+    constructor() {
+        super('lv3')
+        this.level = 3;
+        this.goalCounter = 2;
+    }
 
     create(){
-        //establish level parameters
-        this.level = 1;
-        this.goalCounter = 1;
-
+        console.log(this.goalCounter)
         //create level
         //spawners
         let s1 = this.add.image((Math.random() * this.width)/2, (Math.random() * this.height)/2, 'spawner')
@@ -81,6 +98,7 @@ class Level3 extends GameScene{
     }
 
     finishLevel(){
+        this.obliterateBalls();
         this.scene.start('sum', {time: this.timeElapsed, obj: this.gravObj.length, lv: this.level});
     }
 }
@@ -151,6 +169,6 @@ const game = new Phaser.Game({
     title: "Graballty",
     physics: {
         default: 'arcade',
-        arcade: { gravity: {y: 150}, debug: true }
+        arcade: { gravity: {y: 150}, debug: false }
     }
 });
